@@ -1,0 +1,6 @@
+name: VersionCheckerX
+version: '${project.version}'
+main: com.vinitjar.versionchecker.VersionCheckerX
+api-version: 1.18
+authors: [ Vinit_jar, Bastaboii ]
+description: Version Checker is a plugin that can check for all the plugins in your server and inform if a plugin is outdated
