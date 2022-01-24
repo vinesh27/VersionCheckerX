@@ -33,14 +33,10 @@ public final class VersionCheckerX extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(!sender.isOp()) return false;
         if(cmd.getName().equalsIgnoreCase("versionChecker")) {
-            if (!(args.length == 1)) {
-                sender.sendMessage(ChatColor.RED + "Please specify the mode");
-                return false;
-            }
             if (args[0].equalsIgnoreCase("reload")) {
                 reloadConfig();
                 sender.sendMessage(ChatColor.GREEN + "Plugin Reloaded!");
-                getServer().getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&Version Checker&8] ") + ChatColor.GREEN + "Config Reloaded!");
+                getServer().getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "[VersionCheckerX]" + ChatColor.RESET + "" + ChatColor.GREEN + ChatColor.GREEN + "Config Reloaded!");
                 return true;
             } else if (args[0].equalsIgnoreCase("check")) {
                 sender.sendMessage("Starting Search");
