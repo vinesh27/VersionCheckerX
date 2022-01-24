@@ -1,0 +1,4 @@
+versionID:
+  # Resource IDs of all the plugins you want to check.
+  # Resource ID is the last number in a plugin's url
+  versionList: []
