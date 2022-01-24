@@ -22,12 +22,12 @@ public final class VersionCheckerX extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
         Bukkit.getServer().getConsoleSender().sendMessage(
-                ChatColor.translateAlternateColorCodes('&', "&8[&VersionCheckerX&8] ") + " has started :)");
+               ChatColor.GOLD + "" + ChatColor.BOLD + "[VersionCheckerX]" + ChatColor.RESET + "" + ChatColor.GREEN + " has started :)");
     }
     @Override
     public void onDisable() {
         Bukkit.getServer().getConsoleSender().sendMessage(
-                ChatColor.translateAlternateColorCodes('&', "&8[&VersionCheckerX&8] ") + " has stopped :(");
+                ChatColor.GOLD + "" + ChatColor.BOLD + "[VersionCheckerX]" + ChatColor.RESET + "" + ChatColor.RED + " has stopped :(");
     }
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
