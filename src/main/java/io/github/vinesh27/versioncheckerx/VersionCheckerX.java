@@ -1,10 +1,9 @@
-package com.vinitjar.versionchecker;
+package io.github.vinesh27.versioncheckerx;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -12,7 +11,6 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -21,14 +19,17 @@ public final class VersionCheckerX extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        this.getCommand("versionChecker").setExecutor(this);
         Bukkit.getServer().getConsoleSender().sendMessage(
-               ChatColor.GOLD + "" + ChatColor.BOLD + "[VersionCheckerX]" + ChatColor.RESET + "" + ChatColor.GREEN + " has started :)");
+            ChatColor.GOLD + "" + ChatColor.BOLD + "[VersionCheckerX]" + ChatColor.RESET + "" + ChatColor.GREEN + " has started :)");
     }
+    
     @Override
     public void onDisable() {
         Bukkit.getServer().getConsoleSender().sendMessage(
-                ChatColor.GOLD + "" + ChatColor.BOLD + "[VersionCheckerX]" + ChatColor.RESET + "" + ChatColor.RED + " has stopped :(");
+            ChatColor.GOLD + "" + ChatColor.BOLD + "[VersionCheckerX]" + ChatColor.RESET + "" + ChatColor.RED + " has stopped :(");
     }
+
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(!sender.isOp()) return false;
@@ -40,9 +41,17 @@ public final class VersionCheckerX extends JavaPlugin {
                 return true;
             } else if (args[0].equalsIgnoreCase("check")) {
                 sender.sendMessage("Starting Search");
-                ArrayList<String> resources = (ArrayList<String>) getConfig().getList("versionID.versionList");
-                for (String s : resources) {
-                    JSONObject info = getInfo(s);
+                if (getConfig().getList("versionID.versionList") == null || getConfig().getList("versionID.versionList").size() == 0) {
+                    sender.sendMessage("No version list found");
+                    return false;
+                }
+                if (!(getConfig().getList("versionID.versionList") instanceof ArrayList)) {
+                    sender.sendMessage("VersionList is not an ArrayList");
+                    return false;
+                }
+                ArrayList<Integer> resources = (ArrayList<Integer>) getConfig().getIntegerList("versionID.versionList");
+                for (Integer s : resources) {
+                    JSONObject info = getInfo(String.valueOf(s));
                     if(info.containsKey("code")){
                         sender.sendMessage("Error: " + info.toString());
                         return false;
@@ -53,7 +62,7 @@ public final class VersionCheckerX extends JavaPlugin {
                         sender.sendMessage(ChatColor.GOLD + info.get("title").toString() + " " +
                                 ChatColor.GREEN + latestVersion + " | " +
                                 ChatColor.RED + currentVersion);
-                        sender.sendMessage(ChatColor.GOLD + info.get("title").toString() + " Link: " + getPluginLink(s));
+                        sender.sendMessage(ChatColor.GOLD + info.get("title").toString() + " Link: " + getPluginLink(String.valueOf(s)));
                     } else {
                         sender.sendMessage(ChatColor.GOLD + info.get("title").toString() + " " +
                                 ChatColor.GREEN + latestVersion + " | " +
