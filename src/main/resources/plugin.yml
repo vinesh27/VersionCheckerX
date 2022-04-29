@@ -7,4 +7,4 @@ description: Version Checker is a plugin that can check for all the plugins in y
 commands:
   versionChecker:
     description: Used to check the versions of plugins
-    usage: <command>
+    usage: /<command>
