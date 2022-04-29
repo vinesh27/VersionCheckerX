@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public final class VersionCheckerX extends JavaPlugin {
     @Override
@@ -37,7 +38,7 @@ public final class VersionCheckerX extends JavaPlugin {
             if (args[0].equalsIgnoreCase("reload")) {
                 reloadConfig();
                 sender.sendMessage(ChatColor.GREEN + "Plugin Reloaded!");
-                getServer().getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "[VersionCheckerX]" + ChatColor.RESET + "" + ChatColor.GREEN + ChatColor.GREEN + "Config Reloaded!");
+                getServer().getConsoleSender().sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + " [VersionCheckerX]" + ChatColor.RESET + "" + ChatColor.GREEN + ChatColor.GREEN + "Config Reloaded!");
                 return true;
             } else if (args[0].equalsIgnoreCase("check")) {
                 sender.sendMessage("Starting Search");
@@ -51,14 +52,21 @@ public final class VersionCheckerX extends JavaPlugin {
                 }
                 ArrayList<Integer> resources = (ArrayList<Integer>) getConfig().getIntegerList("versionID.versionList");
                 for (Integer s : resources) {
+                    sender.sendMessage(String.valueOf(s));
                     JSONObject info = getInfo(String.valueOf(s));
+                    if (info == null) {
+                        sender.sendMessage("Failed to get info for " + s);
+                        continue;
+                    }
                     if(info.containsKey("code")){
-                        sender.sendMessage("Error: " + info.toString());
+                        sender.sendMessage("Error: " + info);
                         return false;
                     }
+                    sender.sendMessage(info.toString());
+                    
                     String latestVersion = info.get("current_version").toString();
                     String currentVersion = getInstalledVersion(info.get("title").toString());
-                    if (latestVersion != currentVersion) {
+                    if (!Objects.equals(latestVersion, currentVersion)) {
                         sender.sendMessage(ChatColor.GOLD + info.get("title").toString() + " " +
                                 ChatColor.GREEN + latestVersion + " | " +
                                 ChatColor.RED + currentVersion);
@@ -88,6 +96,7 @@ public final class VersionCheckerX extends JavaPlugin {
                             ChatColor.GREEN + latestVersion + " | " +
                             ChatColor.GREEN + currentVersion);
                 }
+                return true;
             }
         }
         return super.onCommand(sender, cmd, label, args);
